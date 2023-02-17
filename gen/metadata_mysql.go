@@ -32,14 +32,17 @@ type initMetaData_Mysql struct {
 }
 
 func NewInitMetaDataMysql(dbConf *utils.DBConfig) *initMetaData_Mysql {
+	db := InitMysqlDB(dbConf)
+	if utils.Global.Debug {
+		db = db.Debug()
+	}
 	return &initMetaData_Mysql{
-		db: InitMysqlDB(dbConf),
+		db: db,
 	}
 }
 
 func InitMysqlDB(dbConf *utils.DBConfig) *gorm.DB {
 
-	// dnsFmt := "host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=Asia/Shanghai"
 	dnsFmt := "%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local"
 	dsn := fmt.Sprintf(dnsFmt, dbConf.User, dbConf.Password, dbConf.Host, dbConf.Port, dbConf.DBName)
 
@@ -47,7 +50,6 @@ func InitMysqlDB(dbConf *utils.DBConfig) *gorm.DB {
 	if err != nil {
 		panic(err)
 	}
-	// DB = _db.Debug()
 
 	sqlDB, _ := _db.DB()
 

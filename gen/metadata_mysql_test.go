@@ -3,12 +3,17 @@ package gen
 import (
 	"gorm-gen/utils"
 	"testing"
-
-	"gorm.io/gorm"
 )
 
 func TestQueryMetaData(t *testing.T) {
 
+	_db := InitMysqlDB(&utils.DBConfig{
+		Host:     "192.168.19.141",
+		Port:     3306,
+		DBName:   "testdb",
+		User:     "root",
+		Password: "root123",
+	})
 	qm := &initMetaData_Mysql{
 		db: _db,
 	}
@@ -18,20 +23,4 @@ func TestQueryMetaData(t *testing.T) {
 	}
 
 	t.Logf("rst:%+v", f)
-}
-
-
-
-var _db *gorm.DB
-
-func init() {
-
-	_db = InitMysqlDB(&utils.DBConfig{
-		Host:     "192.168.19.141",
-		Port:     3306,
-		DBName:   "testdb",
-		User:     "root",
-		Password: "root123",
-	})
-
 }

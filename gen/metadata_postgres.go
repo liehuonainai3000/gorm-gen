@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-const sql = `
+const sql_postgres = `
 SELECT
 	A.ordinal_position,
 	A.column_name,
@@ -49,12 +49,16 @@ type initMetaData_Postgres struct {
 }
 
 func NewInitMetaDataPostgres(dbConf *utils.DBConfig) *initMetaData_Postgres {
+	db := InitPostgresDB(dbConf)
+	if utils.Global.Debug {
+		db = db.Debug()
+	}
 	return &initMetaData_Postgres{
-		db: initPostgresDB(dbConf),
+		db: db,
 	}
 }
 
-func initPostgresDB(dbConf *utils.DBConfig) *gorm.DB {
+func InitPostgresDB(dbConf *utils.DBConfig) *gorm.DB {
 
 	dnsFmt := "host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=Asia/Shanghai"
 	dsn := fmt.Sprintf(dnsFmt, dbConf.Host, dbConf.User, dbConf.Password, dbConf.DBName, dbConf.Port)
@@ -82,7 +86,7 @@ func (f initMetaData_Postgres) QueryMetaData(schema, tableName string) ([]Field,
 		schema = "public"
 	}
 	//查询数据库获取表的元数据
-	err := f.db.Raw(sql, tableName, schema, tableName).Scan(&rst).Error
+	err := f.db.Raw(sql_postgres, tableName, schema, tableName).Scan(&rst).Error
 	if err != nil {
 		Logger.Errorf("Query Database err :%+v", err)
 		return nil, err

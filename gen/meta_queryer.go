@@ -14,8 +14,8 @@ type MetaQueryer interface {
 
 var metaQueryers map[string]MetaQueryer = make(map[string]MetaQueryer)
 
-func RegisteMetaQuery(dbType string, metaQuery MetaQueryer) {
-	metaQueryers[dbType] = metaQuery
+func RegisteMetaQuery(dbCode string, metaQuery MetaQueryer) {
+	metaQueryers[dbCode] = metaQuery
 }
 
 func InitMetaQueryers() {
@@ -27,7 +27,6 @@ func InitMetaQueryers() {
 			mq = NewInitMetaDataPostgres(&v)
 		} else if v.DBType == "mysql" {
 			mq = NewInitMetaDataMysql(&v)
-
 		}
 
 		metaQueryers[k] = mq

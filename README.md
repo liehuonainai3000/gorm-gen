@@ -2,7 +2,7 @@
 ## 使用说明
 
 ### 本工具用于golang的数据库访问代码生成
-- 支持gorm和sqlx两种数据库访问方式。
+- 支持gorm和sqlx两种数据库访问方式
 - 支持的数据库类型包括：postgresql，mysql
 - 可以同时配置多个数据源
 
@@ -101,8 +101,12 @@ curl -X POST -H "Content-Type:application/json" http://localhost:7000/gen -d @re
 }
 ```
 参数说明：
+ - DBConfigs 可配置多个数据源
  - dbType 代表所用的数据库类型，目前支持postgres（pg）和mysql
  - fieldTypeMap用于指定数据库字段类型与struct字段类型的对应关系，可根据需要自行修改或添加。
 
 ### 扩展
-可通过实现MetaQueryer接口，并通过gen.RegisteMetaQuery(dbCode string, metaQuery MetaQueryer)注册方法,实现对其他数据库的支持。
+如何实现对其它数据库的支持: (  gorm对一些数据库不支持，如db2 )
+1. 实现MetaQueryer接口，用于查询数据表的字段元数据信息。
+2. 修改meta_queryer.go或通过gen.RegisteMetaQuery函数将接口注册到服务中。
+3. 在app.json中添加字段类型对应关系

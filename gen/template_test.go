@@ -34,6 +34,13 @@ func TestGenerate(t *testing.T) {
 
 func TestMapTableFieldType(t *testing.T) {
 	utils.InitGlobalConfig()
+	_db := InitMysqlDB(&utils.DBConfig{
+		Host:     "192.168.19.141",
+		Port:     3306,
+		DBName:   "testdb",
+		User:     "root",
+		Password: "root123",
+	})
 	qm := &initMetaData_Mysql{
 		db: _db,
 	}
@@ -55,30 +62,4 @@ func TestMapTableFieldType(t *testing.T) {
 
 	t.Logf("fields:%+v", tt.Fields)
 
-}
-
-func TestChangeSliceValue(t *testing.T) {
-	v := []*Field{{FieldName: "f1", FieldType: "string"}, {FieldName: "f2", FieldType: "int"}}
-	t.Log("1: ", v[0])
-	for _, itm := range v {
-		itm.FieldType = "string-1"
-	}
-	t.Log("1: ", v[0])
-
-	v1 := []Field{{FieldName: "f1", FieldType: "string"}, {FieldName: "f2", FieldType: "int"}}
-	t.Log("2: ", v1[0])
-	for _, itm := range v1 {
-		itm.FieldType = "string-1"
-	}
-	t.Log("2: ", v1[0])
-
-	v2 := []Field{{FieldName: "f1", FieldType: "string"}, {FieldName: "f2", FieldType: "int"}}
-	t.Log("3: ", v2[0])
-	for _, itm := range v2 {
-		changeValue(&itm)
-	}
-	t.Log("3: ", v2[0])
-}
-func changeValue(f *Field) {
-	f.FieldType = "string-1"
 }

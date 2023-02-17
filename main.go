@@ -37,7 +37,7 @@ func genFile(w http.ResponseWriter, req *http.Request) {
 
 	b, err := io.ReadAll(req.Body)
 	if err != nil {
-		w.Write([]byte(err.Error()))
+		io.WriteString(w, err.Error())
 		return
 	}
 
@@ -46,15 +46,14 @@ func genFile(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		mylog.Logger.Error(err)
-		w.Write([]byte(err.Error()))
+		io.WriteString(w, err.Error())
 		return
 	}
 
 	err = utils.GetFirestErr(t)
 	if err != nil {
 		mylog.Logger.Error(err)
-
-		w.Write([]byte(err.Error()))
+		io.WriteString(w, err.Error())
 		return
 	}
 
@@ -62,16 +61,16 @@ func genFile(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		mylog.Logger.Error(err)
-		w.Write([]byte(err.Error()))
+		io.WriteString(w, err.Error())
 		return
 	}
 	err = gen.GenerateFile(t, mq)
 	if err != nil {
 		mylog.Logger.Error(err)
-		w.Write([]byte(err.Error()))
+		io.WriteString(w, err.Error())
 		return
 	}
 	mylog.Logger.Infof("Generate Code OK , table_name:%s", t.TableName)
 
-	w.Write([]byte("Generate Code OK"))
+	io.WriteString(w, "Generate Code OK")
 }
