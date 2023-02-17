@@ -1,8 +1,10 @@
 
 ## 使用说明
 
-### 本工具用于golang数据库访问的service生成
+### 本工具用于golang的数据库访问代码生成
 - 支持gorm和sqlx两种数据库访问方式。
+- 支持的数据库类型包括：postgresql，mysql
+- 可以同时配置多个数据源
 
 ### 基于http方式进行交互
 
@@ -24,6 +26,19 @@ curl -X POST -H "Content-Type:application/json" http://localhost:7000/gen -d @re
     "remark": "用户信息"
 }
 ```
+
+参数说明：
+
+|参数名|说明|
+|-|-|
+|db_code|用于指定不同给的数据库配置，对应app.json中DBConfigs的key值|
+|table_name|要生成代码的数据库表名|
+|object_name|生成模型的Struct名|
+|package_base_path|生成代码的包基础路径
+|generate_path|生成代码的存放路径|
+|generate_type|生成数据库访问类型，参数值：gorm、sqlx|
+|create_file_types|用于指定代码生成类型，gorm包括：model/service，sqlx包括：dao/entity/do/service。如果不指定，则全部生成。|
+|remark|生成对象描述|
 
 
 ### 基本配置文件app.json
@@ -85,3 +100,9 @@ curl -X POST -H "Content-Type:application/json" http://localhost:7000/gen -d @re
     }
 }
 ```
+参数说明：
+ - dbType 代表所用的数据库类型，目前支持postgres（pg）和mysql
+ - fieldTypeMap用于指定数据库字段类型与struct字段类型的对应关系，可根据需要自行修改或添加。
+
+### 扩展
+可通过实现MetaQueryer接口，并通过gen.RegisteMetaQuery(dbCode string, metaQuery MetaQueryer)注册方法,实现对其他数据库的支持。
