@@ -19,7 +19,7 @@ type TableTemplate struct {
 	//生成类型：gorm/sqlx,默认gorm
 	GenerateType string `json:"generate_type"`
 
-	//创建文件类型，目前有：model/service,如果为空则全部生成
+	//创建文件类型，目前有：gorm:model/service,sqlx:dao/service/entity/do,如果为空则全部生成
 	CreateFileTypes []string `json:"create_file_types"`
 
 	//字段列表，通过MetaQueryer生成
