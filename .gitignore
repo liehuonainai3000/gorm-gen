@@ -1,0 +1,6 @@
+/.vscode
+/internal
+/internal_sqlx
+/vendor
+/zap.log
+/*/zap.log
